@@ -1,13 +1,11 @@
-package io.gihub.nathanaelcarauna;
+package io.gihub.nathanaelcarauna.configurations;
 
 
+import io.gihub.nathanaelcarauna.annotations.DevelopmentProfile;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
-@Configuration
-@Profile("development")
+@DevelopmentProfile
 public class MyConfiguration {
 
     @Bean()
@@ -15,7 +13,7 @@ public class MyConfiguration {
         return "Sistema de Vendas";
     }
 
-    @Bean()
+    @Bean(name = "executar animal")
     public CommandLineRunner executar(){
         return args -> {
             System.out.println("RODANDO A CONFIGURAÇÂO DE DESENVOLVIMENTO");
