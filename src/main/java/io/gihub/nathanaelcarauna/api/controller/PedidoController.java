@@ -1,10 +1,12 @@
 package io.gihub.nathanaelcarauna.api.controller;
 
+import io.gihub.nathanaelcarauna.api.dto.AtualizacaoStatusPedidoDTO;
 import io.gihub.nathanaelcarauna.api.dto.InformacoesItemPedidoDTO;
 import io.gihub.nathanaelcarauna.api.dto.InformacoesPedidoDTO;
 import io.gihub.nathanaelcarauna.api.dto.PedidoDTO;
 import io.gihub.nathanaelcarauna.domain.entity.ItemPedido;
 import io.gihub.nathanaelcarauna.domain.entity.Pedido;
+import io.gihub.nathanaelcarauna.domain.enums.StatusPedido;
 import io.gihub.nathanaelcarauna.service.PedidoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
@@ -40,6 +42,13 @@ public class PedidoController {
         return service.obterPedidoCompleto(id)
                 .map(p -> converter(p))
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Pedido não encontrado"));
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(NO_CONTENT)
+    public void updateStatus(@PathVariable Integer id, @RequestBody AtualizacaoStatusPedidoDTO dto){
+        String novoStatus = dto.getNovoStatus();
+        service.atualizaStatus(id, StatusPedido.valueOf(novoStatus));
     }
 
     private InformacoesPedidoDTO converter(Pedido pedido) {

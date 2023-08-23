@@ -11,6 +11,7 @@ import io.gihub.nathanaelcarauna.domain.repository.Clientes;
 import io.gihub.nathanaelcarauna.domain.repository.ItemsPedido;
 import io.gihub.nathanaelcarauna.domain.repository.Pedidos;
 import io.gihub.nathanaelcarauna.domain.repository.Produtos;
+import io.gihub.nathanaelcarauna.exception.PedidoNaoEncontradoException;
 import io.gihub.nathanaelcarauna.exception.RegraNegocioException;
 import io.gihub.nathanaelcarauna.service.PedidoService;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,16 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public Optional<Pedido> obterPedidoCompleto(Integer id) {
         return pedidosRepository.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public void atualizaStatus(Integer id, StatusPedido statusPedido) {
+        pedidosRepository.findById(id)
+                .map(pedido -> {
+                    pedido.setStatus(statusPedido);
+                    return pedidosRepository.save(pedido);
+                }).orElseThrow(() -> new PedidoNaoEncontradoException("Pedido não encontrado"));
     }
 
     private List<ItemPedido> converterItems(Pedido pedido, List<ItemPedidoDTO> items){

@@ -1,6 +1,7 @@
 package io.gihub.nathanaelcarauna.api.controller;
 
 import io.gihub.nathanaelcarauna.api.ApiErrors;
+import io.gihub.nathanaelcarauna.exception.PedidoNaoEncontradoException;
 import io.gihub.nathanaelcarauna.exception.RegraNegocioException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,5 +18,11 @@ public class ApplicationControllerAdvice {
     public ApiErrors handleRegraNegocioException(RegraNegocioException ex){
         String message = ex.getMessage();
         return new ApiErrors(message);
+    }
+
+    @ExceptionHandler(PedidoNaoEncontradoException.class)
+    @ResponseStatus(NOT_FOUND)
+    public ApiErrors handlePedidoNotFoundException(PedidoNaoEncontradoException ex){
+        return new ApiErrors(ex.getMessage());
     }
 }
