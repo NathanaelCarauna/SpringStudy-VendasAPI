@@ -6,6 +6,7 @@ import io.gihub.nathanaelcarauna.domain.entity.Cliente;
 import io.gihub.nathanaelcarauna.domain.entity.ItemPedido;
 import io.gihub.nathanaelcarauna.domain.entity.Pedido;
 import io.gihub.nathanaelcarauna.domain.entity.Produto;
+import io.gihub.nathanaelcarauna.domain.enums.StatusPedido;
 import io.gihub.nathanaelcarauna.domain.repository.Clientes;
 import io.gihub.nathanaelcarauna.domain.repository.ItemsPedido;
 import io.gihub.nathanaelcarauna.domain.repository.Pedidos;
@@ -40,7 +41,7 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setTotal(dto.getTotal());
         pedido.setDataPedido(LocalDate.now());
         pedido.setCliente(cliente);
-
+        pedido.setStatus(StatusPedido.REALIZADO);
         List<ItemPedido> itemsPedidos = converterItems(pedido, dto.getItems());
         pedidosRepository.save(pedido);
         itemsPedidoRepository.saveAll(itemsPedidos);
