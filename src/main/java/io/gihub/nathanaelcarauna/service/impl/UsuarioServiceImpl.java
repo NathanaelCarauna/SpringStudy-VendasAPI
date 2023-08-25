@@ -2,6 +2,7 @@ package io.gihub.nathanaelcarauna.service.impl;
 
 import io.gihub.nathanaelcarauna.domain.entity.Usuario;
 import io.gihub.nathanaelcarauna.domain.repository.UsuarioRepository;
+import io.gihub.nathanaelcarauna.exception.SenhaInvalidaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,15 @@ public class UsuarioServiceImpl implements UserDetailsService {
     private PasswordEncoder encoder;
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    public UserDetails autenticar(Usuario usuario){
+        UserDetails userDetails = loadUserByUsername(usuario.getLogin());
+        boolean matches = encoder.matches(usuario.getSenha(), userDetails.getPassword());
+        if(matches){
+            return userDetails;
+        }
+        throw new SenhaInvalidaException();
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
